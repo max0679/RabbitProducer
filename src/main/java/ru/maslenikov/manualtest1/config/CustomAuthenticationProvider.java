@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -14,9 +15,11 @@ import java.util.Arrays;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private final MyUserDetailsService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
-    public CustomAuthenticationProvider(MyUserDetailsService userDetailsService) {
+    public CustomAuthenticationProvider(MyUserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -27,7 +30,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        if (userDetails.getPassword().equals(password)) {
+        if (userDetails.getPassword().equals(passwordEncoder.encode(password))) {
             return new UsernamePasswordAuthenticationToken(
                 userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
         } else {

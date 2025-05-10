@@ -20,13 +20,6 @@ public class MyUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = users.stream().filter(user1 -> user1.getName().equals(username)).findFirst();
-
-        if (user.isEmpty()) {
-            throw new UsernameNotFoundException(username);
-        }
-
-        return new MyUserDetails(user.get());
-
+        return new MyUserDetails(users.stream().filter(user1 -> user1.getName().equals(username)).findFirst().orElseThrow(() -> new UsernameNotFoundException(username)));
     }
 }
