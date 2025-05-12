@@ -1,5 +1,6 @@
 package ru.maslenikov.manualtest1.config;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,7 +10,7 @@ import ru.maslenikov.manualtest1.models.User;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Component("MyUserDetailsService")
 public class MyUserDetailsService implements UserDetailsService {
 
     private final List<User> users;
