@@ -14,6 +14,8 @@ import java.util.Arrays;
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
+    //
+
     private final MyUserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
