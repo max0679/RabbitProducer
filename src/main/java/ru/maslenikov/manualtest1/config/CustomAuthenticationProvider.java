@@ -11,8 +11,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
@@ -32,7 +30,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        if (userDetails.getPassword().equals(passwordEncoder.encode(password))) {
+        //if (userDetails.getPassword().equals(passwordEncoder.encode(password))) {
+        if (passwordEncoder.matches(password, userDetails.getPassword())) {
             return new UsernamePasswordAuthenticationToken(
                 userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
         } else {
