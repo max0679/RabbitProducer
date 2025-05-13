@@ -32,9 +32,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
         //if (userDetails.getPassword().equals(passwordEncoder.encode(password))) {
         if (passwordEncoder.matches(password, userDetails.getPassword())) {
+            System.out.println("Authentication Success");
             return new UsernamePasswordAuthenticationToken(
                 userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
         } else {
+            System.out.println("Authentication Failure");
             throw new AuthenticationCredentialsNotFoundException(username);
         }
 

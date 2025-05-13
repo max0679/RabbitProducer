@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import ru.maslenikov.manualtest1.config.filters.AutheticationLoggingFilter;
+import ru.maslenikov.manualtest1.config.filters.RequestValidationFilter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,17 +23,12 @@ import java.util.Map;
 @Configuration
 public class SecurityFilterConfig {
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        //return new BCryptPasswordEncoder();
+    private final RequestValidationFilter requestValidationFilter;
+    private final AutheticationLoggingFilter autheticationLoggingFilter;
 
-        Map<String, PasswordEncoder> encoders = new HashMap<>();
-        encoders.put("noop", NoOpPasswordEncoder.getInstance());
-        encoders.put("bcrypt", new BCryptPasswordEncoder());
-        //encoders.put("scrypt", new SCryptPasswordEncoder());
-        return new DelegatingPasswordEncoder("bcrypt", encoders);
-        /** строка ниже уже имеет функционал, указанный выше, и определяет по умолчанию алгоритм bcrypt **/
-        //return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public SecurityFilterConfig(RequestValidationFilter requestValidationFilter, AutheticationLoggingFilter autheticationLoggingFilter) {
+        this.requestValidationFilter = requestValidationFilter;
+        this.autheticationLoggingFilter = autheticationLoggingFilter;
     }
 
     /***
@@ -47,19 +44,33 @@ public class SecurityFilterConfig {
 
     @Bean
     public SecurityFilterChain configure(HttpSecurity http)  throws Exception {
-        http.httpBasic(Customizer.withDefaults());
-        http.authorizeHttpRequests(
+        http
+            .addFilterBefore(requestValidationFilter, BasicAuthenticationFilter.class)
+            .addFilterAfter(autheticationLoggingFilter, BasicAuthenticationFilter.class)
+            .httpBasic(Customizer.withDefaults())
+            .authorizeHttpRequests(
                 c -> {
                     c.anyRequest().authenticated();
-                }
-
-        );
-        http
+            })
             .csrf(AbstractHttpConfigurer::disable)
-            .headers((c -> {
-            c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable);
-        }));
+            .headers(c -> {
+                c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable);
+            });
         return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        //return new BCryptPasswordEncoder();
+        //return NoOpPasswordEncoder.getInstance();
+
+/*        Map<String, PasswordEncoder> encoders = new HashMap<>();
+        encoders.put("noop", NoOpPasswordEncoder.getInstance());
+        encoders.put("bcrypt", new BCryptPasswordEncoder());*/
+        //encoders.put("scrypt", new SCryptPasswordEncoder());
+        // return new DelegatingPasswordEncoder("bcrypt", encoders);
+        /** строка ниже уже имеет функционал, указанный выше, и определяет по умолчанию алгоритм bcrypt **/
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
 //    @Bean
