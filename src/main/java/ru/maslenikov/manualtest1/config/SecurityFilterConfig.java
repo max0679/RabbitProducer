@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,13 +25,13 @@ public class SecurityFilterConfig {
     public PasswordEncoder passwordEncoder() {
         //return new BCryptPasswordEncoder();
 
-/*        Map<String, PasswordEncoder> encoders = new HashMap<>();
+        Map<String, PasswordEncoder> encoders = new HashMap<>();
         encoders.put("noop", NoOpPasswordEncoder.getInstance());
         encoders.put("bcrypt", new BCryptPasswordEncoder());
         //encoders.put("scrypt", new SCryptPasswordEncoder());
-        return new DelegatingPasswordEncoder("bcrypt", encoders);*/
+        return new DelegatingPasswordEncoder("bcrypt", encoders);
         /** строка ниже уже имеет функционал, указанный выше, и определяет по умолчанию алгоритм bcrypt **/
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        //return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     /***
