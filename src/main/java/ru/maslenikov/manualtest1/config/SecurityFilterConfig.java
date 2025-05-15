@@ -2,6 +2,7 @@ package ru.maslenikov.manualtest1.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import ru.maslenikov.manualtest1.config.filters.AutheticationLoggingFilter;
 import ru.maslenikov.manualtest1.config.filters.RequestValidationFilter;
+import ru.maslenikov.manualtest1.config.filters.StaticKeyAuthFilter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,10 +25,12 @@ import java.util.Map;
 @Configuration
 public class SecurityFilterConfig {
 
+    private final StaticKeyAuthFilter staticKeyAuthFilter;
     private final RequestValidationFilter requestValidationFilter;
     private final AutheticationLoggingFilter autheticationLoggingFilter;
 
-    public SecurityFilterConfig(RequestValidationFilter requestValidationFilter, AutheticationLoggingFilter autheticationLoggingFilter) {
+    public SecurityFilterConfig(StaticKeyAuthFilter staticKeyAuthFilter, RequestValidationFilter requestValidationFilter, AutheticationLoggingFilter autheticationLoggingFilter) {
+        this.staticKeyAuthFilter = staticKeyAuthFilter;
         this.requestValidationFilter = requestValidationFilter;
         this.autheticationLoggingFilter = autheticationLoggingFilter;
     }
@@ -46,16 +50,12 @@ public class SecurityFilterConfig {
     public SecurityFilterChain configure(HttpSecurity http)  throws Exception {
         http
             .addFilterBefore(requestValidationFilter, BasicAuthenticationFilter.class)
+            .addFilterAt(staticKeyAuthFilter, BasicAuthenticationFilter.class)
             .addFilterAfter(autheticationLoggingFilter, BasicAuthenticationFilter.class)
-            .httpBasic(Customizer.withDefaults())
-            .authorizeHttpRequests(
-                c -> {
-                    c.anyRequest().authenticated();
-            })
+            //.httpBasic(Customizer.withDefaults()) //  BasicAuthenticationFilter добавится в цепочку фильтров.
+            .authorizeHttpRequests(c -> c.anyRequest().authenticated())
             .csrf(AbstractHttpConfigurer::disable)
-            .headers(c -> {
-                c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable);
-            });
+            .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         return http.build();
     }
 

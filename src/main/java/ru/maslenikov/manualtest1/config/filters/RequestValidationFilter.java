@@ -5,17 +5,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.Assert;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Configuration
-public class RequestValidationFilter implements Filter {
-    @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        System.out.println("in our filter before authentication!");
+public class RequestValidationFilter extends OncePerRequestFilter {
 
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        HttpServletResponse response = (HttpServletResponse) servletResponse;
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        System.out.println("in our filter before authentication!");
 
         String needHeader = request.getHeader("Request-Id");
 
@@ -25,6 +24,5 @@ public class RequestValidationFilter implements Filter {
         }
 
         filterChain.doFilter(request, response);
-
     }
 }

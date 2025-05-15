@@ -2,19 +2,27 @@ package ru.maslenikov.manualtest1.config.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Component
 @Slf4j
-public class AutheticationLoggingFilter implements Filter {
+public class AutheticationLoggingFilter extends OncePerRequestFilter {
+
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        var httpRequest = (HttpServletRequest) servletRequest;
-        var requestId = httpRequest.getHeader("Request-Id");
-        log.info("Successfully authenticated  request with id " + requestId);
-        filterChain.doFilter(servletRequest, servletResponse);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        var requestId = request.getHeader("Request-Id");
+        System.out.println("Successfully authenticated  request with id " + requestId);
+        filterChain.doFilter(request, response);
     }
+
+/*    @Override
+    public boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+        return true;
+    }*/
+
 }
