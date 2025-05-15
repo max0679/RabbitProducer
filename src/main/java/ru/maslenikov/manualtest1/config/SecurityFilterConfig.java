@@ -52,8 +52,8 @@ public class SecurityFilterConfig {
             .addFilterBefore(requestValidationFilter, BasicAuthenticationFilter.class)
             .addFilterAt(staticKeyAuthFilter, BasicAuthenticationFilter.class)
             .addFilterAfter(autheticationLoggingFilter, BasicAuthenticationFilter.class)
-            //.httpBasic(Customizer.withDefaults()) //  BasicAuthenticationFilter добавится в цепочку фильтров.
-            .authorizeHttpRequests(c -> c.anyRequest().authenticated())
+            .httpBasic(Customizer.withDefaults()) //  BasicAuthenticationFilter добавится в цепочку фильтров.
+            .authorizeHttpRequests(c -> c.anyRequest().permitAll())
             .csrf(AbstractHttpConfigurer::disable)
             .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         return http.build();

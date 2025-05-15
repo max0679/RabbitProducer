@@ -21,9 +21,9 @@ public class UsersBase {
     @Bean
     public List<User> getUsers() {
         return List.of(
-            User.builder().name("max").password(passwordEncoder.encode("max123")).build(),
-            User.builder().name("dima").password(passwordEncoder.encode("dima123")).build(),
-            User.builder().name("stas").password(passwordEncoder.encode("stas123")).build()
+            User.builder().name("max").password(passwordEncoder.encode("max123")).role("ROLE_ADMIN").build(),
+            User.builder().name("dima").password(passwordEncoder.encode("dima123")).role("ROLE_USER").build(),
+            User.builder().name("stas").password(passwordEncoder.encode("stas123")).role("ROLE_USER").build()
         );
     }
 
