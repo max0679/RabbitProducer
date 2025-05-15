@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.maslenikov.manualtest1.test.Person;
 
 import java.util.concurrent.*;
 import java.util.function.Supplier;
@@ -24,6 +25,19 @@ public class HomeController {
         this.homeController = homeController;
     }
 
+    @GetMapping("/test2")
+    public String test2() {
+
+        Person person = new Person();
+        person
+            .custom1(p -> {
+                p.setAge(16);
+                p.setName("max");
+            })
+        .custom2(p -> {p.setProperty("aga");});
+
+        return "OK";
+    }
 
     @GetMapping("/test")
     public String ciao() throws Exception {
