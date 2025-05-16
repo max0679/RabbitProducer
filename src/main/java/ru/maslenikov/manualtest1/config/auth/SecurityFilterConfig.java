@@ -2,7 +2,6 @@ package ru.maslenikov.manualtest1.config.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -11,9 +10,10 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.maslenikov.manualtest1.config.filters.AutheticationLoggingFilter;
-import ru.maslenikov.manualtest1.config.filters.RequestValidationFilter;
-import ru.maslenikov.manualtest1.config.filters.StaticKeyAuthFilter;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import ru.maslenikov.manualtest1.config.auth.filters.AutheticationLoggingFilter;
+import ru.maslenikov.manualtest1.config.auth.filters.RequestValidationFilter;
+import ru.maslenikov.manualtest1.config.auth.filters.StaticKeyAuthFilter;
 import ru.maslenikov.manualtest1.response.CustomAuthenticationFailureHandler;
 
 @Configuration
@@ -24,13 +24,13 @@ public class SecurityFilterConfig {
     private final StaticKeyAuthFilter staticKeyAuthFilter;
     private final RequestValidationFilter requestValidationFilter;
     private final AutheticationLoggingFilter autheticationLoggingFilter;
-    //private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
-    public SecurityFilterConfig(StaticKeyAuthFilter staticKeyAuthFilter, RequestValidationFilter requestValidationFilter, AutheticationLoggingFilter autheticationLoggingFilter) {
+    public SecurityFilterConfig(StaticKeyAuthFilter staticKeyAuthFilter, RequestValidationFilter requestValidationFilter, AutheticationLoggingFilter autheticationLoggingFilter, CustomAuthenticationFailureHandler customAuthenticationFailureHandler) {
         this.staticKeyAuthFilter = staticKeyAuthFilter;
         this.requestValidationFilter = requestValidationFilter;
         this.autheticationLoggingFilter = autheticationLoggingFilter;
-        //this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
+        this.customAuthenticationFailureHandler = customAuthenticationFailureHandler;
     }
 
 
@@ -50,15 +50,16 @@ public class SecurityFilterConfig {
 
         http
             //.addFilterBefore(requestValidationFilter, BasicAuthenticationFilter.class)
-            //.addFilterBefore(staticKeyAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(staticKeyAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            //.addFilterAt(staticKeyAuthFilter, UsernamePasswordAuthenticationFilter.class)
             //.addFilterAfter(autheticationLoggingFilter, BasicAuthenticationFilter.class)
-            .httpBasic(c -> {
-                c.authenticationEntryPoint(new CustomEntryPoint());
-            }) ///  BasicAuthenticationFilter добавится в цепочку фильтров.
+//            .httpBasic(c -> {
+//                c.authenticationEntryPoint(new CustomEntryPoint());
+//            }) ///  BasicAuthenticationFilter добавится в цепочку фильтров.
                 //.httpBasic(Customizer.withDefaults())
-//            .formLogin(c -> {
-//                c.failureHandler(customAuthenticationFailureHandler);
-//            })
+            .formLogin(c -> {
+                c.failureHandler(customAuthenticationFailureHandler);
+            })
             .authorizeHttpRequests(c -> {
                 c.anyRequest().authenticated();
             })

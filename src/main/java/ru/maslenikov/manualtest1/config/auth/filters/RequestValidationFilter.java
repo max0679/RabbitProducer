@@ -1,4 +1,4 @@
-package ru.maslenikov.manualtest1.config.filters;
+package ru.maslenikov.manualtest1.config.auth.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

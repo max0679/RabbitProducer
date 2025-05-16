@@ -6,11 +6,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-//@Component
-//public class ExeceptionHandler {
-//    @ExceptionHandler(value = Exception.class)
-//    public HttpEntity<String> handleException(Exception ex){
-//        return new ResponseEntity<String>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-//    }
-//
-//}
+@Component
+public class ExeceptionHandler {
+    @ExceptionHandler(value = Exception.class)
+    public HttpEntity<String> handleException(Exception ex){
+        return new ResponseEntity<String>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+}

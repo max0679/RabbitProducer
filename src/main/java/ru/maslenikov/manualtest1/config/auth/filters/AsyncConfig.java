@@ -1,4 +1,4 @@
-package ru.maslenikov.manualtest1.config.filters;
+package ru.maslenikov.manualtest1.config.auth.filters;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Bean;
