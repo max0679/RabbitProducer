@@ -27,7 +27,6 @@ public class HomeController {
 
     @GetMapping("/test2")
     public String test2() {
-
         Person person = new Person();
         person
             .custom1(p -> {
@@ -36,13 +35,19 @@ public class HomeController {
             })
         .custom2(p -> {p.setProperty("aga");});
 
+        SecurityContext context = SecurityContextHolder.getContext();
         return "OK";
     }
 
+    @GetMapping("/test3")
+    public String ciao2() throws Exception {
+        SecurityContext context = SecurityContextHolder.getContext();
+        return context.getAuthentication().getName();
+    }
     @GetMapping("/test")
     public String ciao() throws Exception {
         Callable<String> task = () -> {
-            System.out.println("executing task");
+
             SecurityContext context = SecurityContextHolder.getContext();
             return context.getAuthentication().getName();
         };
@@ -53,7 +58,6 @@ public class HomeController {
             return "Ciao, " + e.submit(task).get() + "!";
             //return "Ciao, " + e.submit(contextTask).get() + "!";
         } finally {
-            System.out.println("shutting down");
             e.shutdown();
         }
     }

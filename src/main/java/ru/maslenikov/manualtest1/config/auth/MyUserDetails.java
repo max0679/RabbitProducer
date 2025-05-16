@@ -1,4 +1,4 @@
-package ru.maslenikov.manualtest1.config;
+package ru.maslenikov.manualtest1.config.auth;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

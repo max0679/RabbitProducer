@@ -1,4 +1,4 @@
-package ru.maslenikov.manualtest1.config;
+package ru.maslenikov.manualtest1.config.auth;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
@@ -24,6 +26,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+
+        System.out.println("in Authentication authenticate " + LocalDateTime.now().toString());
 
         String username = authentication.getName();
         String password = String.valueOf(authentication.getCredentials());

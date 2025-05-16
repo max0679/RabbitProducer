@@ -1,4 +1,4 @@
-package ru.maslenikov.manualtest1.config;
+package ru.maslenikov.manualtest1.config.auth;
 
 
 import org.springframework.context.annotation.Bean;
@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.maslenikov.manualtest1.models.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Configuration

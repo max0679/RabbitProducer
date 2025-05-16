@@ -1,4 +1,4 @@
-package ru.maslenikov.manualtest1.config;
+package ru.maslenikov.manualtest1.config.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -20,9 +20,9 @@ public class AutheticationLoggingFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-/*    @Override
+    @Override
     public boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         return true;
-    }*/
+    }
 
 }

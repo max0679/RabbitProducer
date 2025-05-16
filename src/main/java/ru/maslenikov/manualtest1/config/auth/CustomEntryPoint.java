@@ -1,4 +1,4 @@
-package ru.maslenikov.manualtest1.config;
+package ru.maslenikov.manualtest1.config.auth;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
         httpServletResponse.getWriter().write(e.getMessage());
         httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         httpServletResponse.flushBuffer();
-        System.out.println("здесь");
+        System.out.println("ошибка!");
 
     }
 
