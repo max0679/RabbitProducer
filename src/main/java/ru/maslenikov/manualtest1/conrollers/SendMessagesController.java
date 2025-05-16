@@ -1,14 +1,17 @@
 package ru.maslenikov.manualtest1.conrollers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 import ru.maslenikov.manualtest1.config.rabbit.MQConfig;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 
 @RestController
 @Slf4j
@@ -22,8 +25,15 @@ public class SendMessagesController {
         this.rabbitTemplate = rabbitTemplate;
     }
 
+    @GetMapping("/test4")
+    public String ciao2() throws Exception {
+        SecurityContext context = SecurityContextHolder.getContext();
+        return context.getAuthentication().getName();
+    }
+
     @GetMapping("/qe1")
-    public ResponseEntity<String> qe1(@RequestParam String message) {
+    public ResponseEntity<String> qe1(@RequestParam(required = true) String message) {
+
         log.info("message {} send ({})", message, ++messCounter);
         rabbitTemplate.convertAndSend(MQConfig.exchangeName, "first_key", message);
         return ResponseEntity.ok("OK (q1): " + message);
