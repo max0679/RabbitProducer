@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @EnableAsync
 public class AsyncConfig {
 
+    // лучше использовать PostConstruct
     @Bean
     public InitializingBean initializingBean() {
         return () -> SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
