@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.maslenikov.manualtest1.config.rabbit.MQConfig;
+import ru.maslenikov.manualtest1.config.rabbit.MQConfig2;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,7 +36,7 @@ public class SendMessagesController {
     public ResponseEntity<String> qe1(@RequestParam(required = true) String message) {
 
         log.info("message {} send ({})", message, ++messCounter);
-        rabbitTemplate.convertAndSend(MQConfig.exchangeName, "first_key", message);
+        rabbitTemplate.convertAndSend(MQConfig2.exchangeName, "first_key", message);
         return ResponseEntity.ok("OK (q1): " + message);
     }
 
