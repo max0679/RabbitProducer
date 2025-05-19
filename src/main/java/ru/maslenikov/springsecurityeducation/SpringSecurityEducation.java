@@ -22,7 +22,7 @@ public class SpringSecurityEducation {
     @PostConstruct
     public void init() {
 
-        roleService.initStartData();
+        //roleService.initStartData();
 
     }
 

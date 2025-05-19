@@ -28,11 +28,15 @@ public class RoleService {
         this.roleRepository = roleRepository;
     }
 
-    @Transactional
-    public void initStartData() {
-        List<Role> roleList = Arrays.asList(new Role("ROLE_ADMIN"), new Role("ROLE_USER"), new Role("ROLE_OPERATOR"));
-        roleRepository.saveAll(roleList);
+    public Optional<Role> findRoleByName(String name) {
+        return roleRepository.findRoleByName(name);
     }
+
+//    @Transactional
+//    public void initStartData() {
+//        List<Role> roleList = Arrays.asList(new Role("ROLE_ADMIN"), new Role("ROLE_USER"), new Role("ROLE_OPERATOR"));
+//        roleRepository.saveAll(roleList);
+//    }
 
 }
 

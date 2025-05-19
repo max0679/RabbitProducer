@@ -30,7 +30,7 @@ public class RabbitSendController {
     @GetMapping("/qe1")
     public ResponseEntity<String> qe1(@RequestParam(required = true) String message) {
 
-        log.info("message {} send ({})", message, ++messCounter);
+        //log.info("message {} send ({})", message, ++messCounter);
         rabbitTemplate.convertAndSend(MQConfig2.exchangeName, "first_key", message);
         return ResponseEntity.ok("OK (q1): " + message);
     }
@@ -38,7 +38,7 @@ public class RabbitSendController {
     @GetMapping("/qe2")
     public ResponseEntity<String> qe2(@RequestParam String message) {
         rabbitTemplate.convertAndSend(MQConfig.exchangeName, "second_key", message);
-        log.info("message {} send ({})", message, ++messCounter);
+        //log.info("message {} send ({})", message, ++messCounter);
         return ResponseEntity.ok("OK (q2): " + message);
     }
 
