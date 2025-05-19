@@ -8,11 +8,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-@Data
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
+@Getter
+@Setter
 @Table(name = "users")
 public class User {
 

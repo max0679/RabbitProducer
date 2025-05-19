@@ -31,7 +31,7 @@ public class SecurityFilterChain {
             })
             .authorizeHttpRequests(c -> {
                 c.requestMatchers("/login", "/registration").permitAll();
-                c.anyRequest().authenticated();
+                c.anyRequest().not().authenticated();
             })
             .csrf(AbstractHttpConfigurer::disable)
             .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));

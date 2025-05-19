@@ -9,6 +9,7 @@ import ru.maslenikov.springsecurityeducation.repositories.UserRepository;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,5 +33,10 @@ public class UserService {
         //user.setRoles(Collections.singleton(roleService.findRoleByName("ROLE_USER").orElse(new Role("ROLE_USER"))));
         userRepository.save(user);
         log.info("User saved: " + user);
+    }
+
+    @Transactional(readOnly = true)
+    public List<User> getAllUsers() {
+        return (List<User>) userRepository.getAllUsers();
     }
 }

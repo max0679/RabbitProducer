@@ -9,6 +9,7 @@ import ru.maslenikov.springsecurityeducation.dto.UserDTO;
 import ru.maslenikov.springsecurityeducation.models.Role;
 import ru.maslenikov.springsecurityeducation.models.User;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -27,9 +28,13 @@ public interface UserMapper {
     }
 
     @Mappings({
-            @Mapping(target = "roles", ignore = true),
+            //@Mapping(target = "roles", ignore = true),
+            @Mapping(source = "birth", target = "birthday"),
+            @Mapping(source = "name", target = "username"),
     })
     UserDTO toUserDTO(User user);
+
+    List<UserDTO> toUserDTOList(Collection<User> user);
 //
 //    List<UserDTO> toUserDTOList(List<User> users);
 
@@ -40,6 +45,7 @@ public interface UserMapper {
             @Mapping(source = "password", target = "password", qualifiedByName = {"UserPasswordMapper", "convertPassword"})
     })
     User toUser(UserDTO userDTO);
+
 
     List<User> toUserList(List<UserDTO> userDTOList);
 
