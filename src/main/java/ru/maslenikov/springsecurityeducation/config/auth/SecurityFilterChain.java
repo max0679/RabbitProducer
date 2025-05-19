@@ -30,7 +30,8 @@ public class SecurityFilterChain {
                 exception.authenticationEntryPoint(new CustomEntryPoint());
             })
             .authorizeHttpRequests(c -> {
-                c.anyRequest().permitAll();
+                c.requestMatchers("/login", "/registration").permitAll();
+                c.anyRequest().authenticated();
             })
             .csrf(AbstractHttpConfigurer::disable)
             .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));

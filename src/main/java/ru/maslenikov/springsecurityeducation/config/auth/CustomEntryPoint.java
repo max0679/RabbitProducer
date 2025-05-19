@@ -21,7 +21,7 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
                 .sendError(HttpStatus.UNAUTHORIZED.value(), "Поймали ошибку "  + e.getMessage());*/
 
         // Запишите тело ответа
-        httpServletResponse.getWriter().write(e.getMessage());
+        httpServletResponse.getWriter().write("в CustomEntryPoint" + ": " + e.getMessage());
         httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         httpServletResponse.flushBuffer();
         System.out.println("ошибка!");
