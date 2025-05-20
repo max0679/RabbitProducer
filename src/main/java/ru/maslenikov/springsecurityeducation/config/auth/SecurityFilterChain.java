@@ -23,7 +23,7 @@ public class SecurityFilterChain {
 
     @Bean
     public org.springframework.security.web.SecurityFilterChain configure(HttpSecurity http) throws Exception {
-
+        // some-new-feat
         http
             //.addFilterBefore(requestValidationFilter, BasicAuthenticationFilter.class)
             .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
