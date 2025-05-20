@@ -32,7 +32,7 @@ public class SecurityFilterChain {
             })
             .authorizeHttpRequests(c -> {
                 c.requestMatchers("/login", "/registration").permitAll();
-                c.anyRequest().hasRole("USER");
+                c.anyRequest().hasRole("USER"); // some more
             })
             .csrf(AbstractHttpConfigurer::disable)
             .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
