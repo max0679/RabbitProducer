@@ -2,6 +2,7 @@ package ru.maslenikov.springsecurityeducation.config.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -31,7 +32,7 @@ public class SecurityFilterChain {
             })
             .authorizeHttpRequests(c -> {
                 c.requestMatchers("/login", "/registration").permitAll();
-                c.anyRequest().not().authenticated();
+                c.anyRequest().hasRole("USER");
             })
             .csrf(AbstractHttpConfigurer::disable)
             .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
