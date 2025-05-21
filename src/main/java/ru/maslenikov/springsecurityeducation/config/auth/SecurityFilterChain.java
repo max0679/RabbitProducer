@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -25,17 +26,20 @@ public class SecurityFilterChain {
     public org.springframework.security.web.SecurityFilterChain configure(HttpSecurity http) throws Exception {
         // some-new-feat
         http
-            //.addFilterBefore(requestValidationFilter, BasicAuthenticationFilter.class)
-            .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling(exception -> {
-                exception.authenticationEntryPoint(new CustomEntryPoint());
-            })
-            .authorizeHttpRequests(c -> {
-                c.requestMatchers("/login", "/registration").permitAll();
-                c.anyRequest().hasRole("USER"); // some more
-            })
-            .csrf(AbstractHttpConfigurer::disable)
-            .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+                //.addFilterBefore(requestValidationFilter, BasicAuthenticationFilter.class)
+                .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new CsrfLogFilter(), CsrfFilter.class)
+                .exceptionHandling(exception -> {
+                    exception.authenticationEntryPoint(new CustomEntryPoint());
+                })
+                .authorizeHttpRequests(c -> {
+                    c.requestMatchers("/login", "/registration").permitAll();
+                    //c.anyRequest().hasRole("USER"); // some more
+                    c.anyRequest().permitAll(); // some more
+                })
+
+                .csrf(c -> c.ignoringRequestMatchers("/users/{name}"))
+                .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         return http.build();
     }
 

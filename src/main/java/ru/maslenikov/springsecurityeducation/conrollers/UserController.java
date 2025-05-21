@@ -1,9 +1,6 @@
 package ru.maslenikov.springsecurityeducation.conrollers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.maslenikov.springsecurityeducation.dto.UserDTO;
 import ru.maslenikov.springsecurityeducation.mappers.UserMapper;
 import ru.maslenikov.springsecurityeducation.models.User;
@@ -31,6 +28,11 @@ public class UserController {
     @GetMapping("/{name}")
     public UserDTO getUser(@PathVariable String name) {
         return userMapper.toUserDTO(userService.findByUsername(name).orElse(null));
+    }
+
+    @PostMapping("/{name}")
+    public String getUserPost(@PathVariable String name, @RequestParam("test") String test) {
+        return name + " " + test;
     }
 
 }
