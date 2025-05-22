@@ -33,9 +33,9 @@ public class CustomCsrfTokenRepository implements CsrfTokenRepository {
     public void saveToken(CsrfToken token, HttpServletRequest request, HttpServletResponse response) {
         String identifier = request.getHeader("X-IDENTIFIER");
 
-        if (identifier == null || identifier.isBlank()) {
-            throw new IllegalArgumentException("X-CSRF-TOKEN header is missing");
-        }
+//        if (identifier == null || identifier.isBlank()) {
+//            throw new IllegalArgumentException("X-CSRF-TOKEN header is missing");
+//        }
 
         Optional<CSRFToken> csrfToken = csrfTokenService.findTokenByIdentifier(identifier);
 

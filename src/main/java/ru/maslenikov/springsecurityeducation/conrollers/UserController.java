@@ -37,6 +37,7 @@ public class UserController {
     }
 
     @PostMapping("/{name}")
+    @CrossOrigin("/someHost")
     public String getUserPost(@PathVariable String name, @RequestParam("test") String test) {
         return name + " " + test;
     }
