@@ -1,8 +1,12 @@
 package ru.maslenikov.springsecurityeducation.conrollers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.bind.annotation.*;
 import ru.maslenikov.springsecurityeducation.dto.UserDTO;
 import ru.maslenikov.springsecurityeducation.mappers.UserMapper;
+import ru.maslenikov.springsecurityeducation.models.CSRFToken;
 import ru.maslenikov.springsecurityeducation.models.User;
 import ru.maslenikov.springsecurityeducation.services.UserService;
 
@@ -26,7 +30,9 @@ public class UserController {
     }
 
     @GetMapping("/{name}")
-    public UserDTO getUser(@PathVariable String name) {
+    public UserDTO getUser(HttpServletRequest request, @PathVariable String name) {
+        CsrfToken handler = (CsrfToken) request.getAttribute("_csrf");
+        System.out.println("Этот токен был сгенерирован при вызове get-запроса: " + handler.getToken());
         return userMapper.toUserDTO(userService.findByUsername(name).orElse(null));
     }
 

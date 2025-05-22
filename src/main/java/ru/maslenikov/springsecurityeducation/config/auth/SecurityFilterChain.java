@@ -2,24 +2,27 @@ package ru.maslenikov.springsecurityeducation.config.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import ru.maslenikov.springsecurityeducation.config.auth.csrf.CsrfLogFilter;
+import ru.maslenikov.springsecurityeducation.config.auth.csrf.CustomCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityFilterChain {
 
     private final JWTFilter jwtFilter;
+    private final CustomCsrfTokenRepository csrfTokenRepository;
 
-    public SecurityFilterChain(JWTFilter jwtFilter) {
+    public SecurityFilterChain(JWTFilter jwtFilter, CustomCsrfTokenRepository csrfTokenRepository) {
         this.jwtFilter = jwtFilter;
+        this.csrfTokenRepository = csrfTokenRepository;
     }
 
     @Bean
@@ -38,7 +41,11 @@ public class SecurityFilterChain {
                     c.anyRequest().permitAll(); // some more
                 })
 
-                .csrf(c -> c.ignoringRequestMatchers("/users/{name}"))
+                .csrf(c -> {
+                    //c.ignoringRequestMatchers("/users/{name}");
+                    c.csrfTokenRepository(csrfTokenRepository);
+                    c.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()); // CsrfTokenRequestAttributeHandler для управления обработкой токена CSRF в HTTP-запросе.
+                })
                 .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         return http.build();
     }

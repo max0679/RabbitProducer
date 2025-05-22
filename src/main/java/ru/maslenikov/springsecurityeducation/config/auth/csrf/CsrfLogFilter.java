@@ -1,4 +1,4 @@
-package ru.maslenikov.springsecurityeducation.config.auth;
+package ru.maslenikov.springsecurityeducation.config.auth.csrf;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
