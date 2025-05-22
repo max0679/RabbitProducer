@@ -62,9 +62,8 @@ public class SecurityFilterChain {
                         return config;
                     };
                     c.configurationSource(source);
-                });
-        ;
-        //.headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+                });;
+                //.headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         return http.build();
     }
 
