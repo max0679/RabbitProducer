@@ -10,8 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import ru.maslenikov.springsecurityeducation.config.auth.csrf.CsrfLogFilter;
 import ru.maslenikov.springsecurityeducation.config.auth.csrf.CustomCsrfTokenRepository;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -46,7 +50,20 @@ public class SecurityFilterChain {
                     c.csrfTokenRepository(csrfTokenRepository);
                     c.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()); // CsrfTokenRequestAttributeHandler для управления обработкой токена CSRF в HTTP-запросе.
                 })
-                .headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
+                // какие хосты смогут использовать инфо с наших запросов, и какие методы и заголовки разрешены
+                .cors(c -> {
+                    CorsConfigurationSource source = request -> {
+                        CorsConfiguration config = new CorsConfiguration();
+                        config.setAllowedOrigins(
+                                List.of("example.com", "example.org"));
+                        config.setAllowedMethods(
+                                List.of("GET", "POST", "PUT", "DELETE"));
+                        config.setAllowedHeaders(List.of("*"));
+                        return config;
+                    };
+                    c.configurationSource(source);
+                });;
+                //.headers(c -> c.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable));
         return http.build();
     }
 
