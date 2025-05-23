@@ -2,17 +2,13 @@ package ru.maslenikov.springsecurityeducation.conrollers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.bind.annotation.*;
+import ru.maslenikov.springsecurityeducation.dto.PageDTO;
 import ru.maslenikov.springsecurityeducation.dto.UserDTO;
 import ru.maslenikov.springsecurityeducation.mappers.UserMapper;
-import ru.maslenikov.springsecurityeducation.models.CSRFToken;
-import ru.maslenikov.springsecurityeducation.models.User;
 import ru.maslenikov.springsecurityeducation.services.UserService;
 
 import java.util.List;
@@ -30,9 +26,10 @@ public class UserController {
     }
 
     @GetMapping("")
-    @PostFilter("filterObject.username.equals(authentication.name)")
-    public List<UserDTO> getAllUsers() {
-        return userMapper.toUserDTOList(userService.getAllUsers());
+    //@PostFilter("filterObject.username.equals(authentication.name)")
+    public PageDTO getAllUsers() {
+        List<UserDTO> users = userMapper.toUserDTOList(userService.getAllUsers());
+        return new PageDTO(users.size(), users);
     }
 
     @GetMapping("/{name}")

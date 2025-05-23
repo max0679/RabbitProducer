@@ -1,6 +1,9 @@
 package ru.maslenikov.springsecurityeducation.services;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.maslenikov.springsecurityeducation.models.Role;
@@ -37,6 +40,8 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<User> getAllUsers() {
-        return (List<User>) userRepository.getAllUsers();
+        //return userRepository.getAllUsers(PageRequest.of(0, 3));
+        Page<User> users = userRepository.findAll(PageRequest.of(0, 3));
+        return userRepository.findUsersByUsers(users.getContent());
     }
 }
