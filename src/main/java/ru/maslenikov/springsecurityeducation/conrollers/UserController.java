@@ -1,6 +1,10 @@
 package ru.maslenikov.springsecurityeducation.conrollers;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.bind.annotation.*;
@@ -30,15 +34,19 @@ public class UserController {
     }
 
     @GetMapping("/{name}")
+    //@PostAuthorize("returnObject.username.equals('max')")
+    @PreAuthorize("hasRole('ADMIN')")
     public UserDTO getUser(HttpServletRequest request, @PathVariable String name) {
-        CsrfToken handler = (CsrfToken) request.getAttribute("_csrf");
-        System.out.println("Этот токен был сгенерирован при вызове get-запроса: " + handler.getToken());
+        System.out.println("внутри контроллера");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        //CsrfToken handler = (CsrfToken) request.getAttribute("_csrf");
+        //System.out.println("Этот токен был сгенерирован при вызове get-запроса: " + handler.getToken());
         return userMapper.toUserDTO(userService.findByUsername(name).orElse(null));
     }
 
     @PostMapping("/{name}")
-    @CrossOrigin("/someHost")
-    public String getUserPost(@PathVariable String name, @RequestParam("test") String test) {
+    //@CrossOrigin("/someHost")
+    public String getUserPost(@PathVariable String name, @RequestParam(value = "test", defaultValue = "defaultVal") String test) {
         return name + " " + test;
     }
 

@@ -2,6 +2,7 @@ package ru.maslenikov.springsecurityeducation.config.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
@@ -19,6 +20,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityFilterChain {
 
     private final JWTFilter jwtFilter;
@@ -35,20 +37,21 @@ public class SecurityFilterChain {
         http
                 //.addFilterBefore(requestValidationFilter, BasicAuthenticationFilter.class)
                 .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(new CsrfLogFilter(), CsrfFilter.class)
+                //.addFilterAfter(new CsrfLogFilter(), CsrfFilter.class)
                 .exceptionHandling(exception -> {
                     exception.authenticationEntryPoint(new CustomEntryPoint());
                 })
                 .authorizeHttpRequests(c -> {
                     c.requestMatchers("/login", "/registration").permitAll();
                     //c.anyRequest().hasRole("USER"); // some more
-                    c.anyRequest().permitAll(); // some more
+                    c.anyRequest().authenticated(); // some more
                 })
 
                 .csrf(c -> {
+                    c.disable();
                     //c.ignoringRequestMatchers("/users/{name}");
-                    c.csrfTokenRepository(csrfTokenRepository);
-                    c.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()); // CsrfTokenRequestAttributeHandler для управления обработкой токена CSRF в HTTP-запросе.
+                    //c.csrfTokenRepository(csrfTokenRepository);
+                    //c.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()); // CsrfTokenRequestAttributeHandler для управления обработкой токена CSRF в HTTP-запросе.
                 })
                 // какие хосты смогут использовать инфо с наших запросов, и какие методы и заголовки разрешены
                 .cors(c -> {
