@@ -44,6 +44,13 @@ public class UserController {
         return userMapper.toUserDTO(userService.findByUsername(name).orElse(null));
     }
 
+    @GetMapping("/{name}/one_more_test")
+    @PostAuthorize("hasPermission(returnObject, 'ROLE_ADMIN')")
+    public UserDTO getUserOneMore(HttpServletRequest request, @PathVariable String name) {
+        System.out.println("внутри контроллера");
+        return userMapper.toUserDTO(userService.findByUsername(name).orElse(null));
+    }
+
     @PostMapping("/{name}")
     //@CrossOrigin("/someHost")
     public String getUserPost(@PathVariable String name, @RequestParam(value = "test", defaultValue = "defaultVal") String test) {
