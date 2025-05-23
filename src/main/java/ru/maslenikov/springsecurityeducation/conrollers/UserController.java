@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("")
-    @PostFilter("filterObject.username.equals(authentication.name)")
+    //@PostFilter("filterObject.username.equals(authentication.name)")
     public List<UserDTO> getAllUsers() {
         return userMapper.toUserDTOList(userService.getAllUsers());
     }
